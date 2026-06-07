@@ -31,6 +31,10 @@
       box-sizing: border-box;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -729,7 +733,7 @@
         </div>
       </div>
 
-      <section class="form-panel sync-panel" aria-label="ตั้งค่า Google Sheet">
+      <section class="form-panel sync-panel" aria-label="ตั้งค่า Google Sheet" hidden>
         <p>ปลายทาง Google Sheet: <span class="sheet-chip">อนามัยแม่และเด็ก 2569</span></p>
         <div class="field">
           <label for="scriptUrl">Google Apps Script Web App URL</label>
@@ -858,6 +862,7 @@
     const storageKey = 'miss-khamyai-visits';
     const pendingKey = 'miss-khamyai-pending-visits';
     const endpointKey = 'miss-khamyai-script-url';
+    const setupKey = 'miss-khamyai-sheet-setup-done';
     const defaultScriptUrl = 'https://script.google.com/macros/s/AKfycbzRf51z7kSF2XzXrPkFJRffiLNCW_T9KPSnWJayqHGAngZPQqO1v7SpSCsz7UWtKF29/exec';
 
     function showToast(message) {
@@ -970,10 +975,11 @@
       }
     }
 
-    async function setupGoogleSheet() {
+    async function setupGoogleSheet(options = {}) {
+      const silent = options.silent === true;
       const endpoint = getEndpoint();
       if (!endpoint) {
-        showToast('กรุณาบันทึก Web App URL ก่อน');
+        if (!silent) showToast('กรุณาบันทึก Web App URL ก่อน');
         updateSyncStatus();
         return false;
       }
@@ -983,7 +989,8 @@
         sheetUrl,
         app: 'MISS นมแม่ ตำบลคำใหญ่'
       });
-      showToast(sent ? 'เตรียม Google Sheet แล้ว' : 'ยังเชื่อมต่อ Google Sheet ไม่สำเร็จ');
+      if (sent) localStorage.setItem(setupKey, 'true');
+      if (!silent) showToast(sent ? 'เตรียม Google Sheet แล้ว' : 'ยังเชื่อมต่อ Google Sheet ไม่สำเร็จ');
       updateSyncStatus();
       return sent;
     }
@@ -1088,6 +1095,9 @@
 
     renderHistory();
     updateSyncStatus();
+    if (!localStorage.getItem(setupKey)) {
+      setupGoogleSheet({ silent: true });
+    }
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
       navigator.serviceWorker.register('sw.js').catch(() => {});
