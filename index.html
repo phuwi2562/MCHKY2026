@@ -858,6 +858,7 @@
     const storageKey = 'miss-khamyai-visits';
     const pendingKey = 'miss-khamyai-pending-visits';
     const endpointKey = 'miss-khamyai-script-url';
+    const defaultScriptUrl = 'https://script.google.com/macros/s/AKfycbzRf51z7kSF2XzXrPkFJRffiLNCW_T9KPSnWJayqHGAngZPQqO1v7SpSCsz7UWtKF29/exec';
 
     function showToast(message) {
       toast.textContent = message;
@@ -904,7 +905,7 @@
     }
 
     function getEndpoint() {
-      return localStorage.getItem(endpointKey) || '';
+      return localStorage.getItem(endpointKey) || defaultScriptUrl;
     }
 
     function getPending() {
@@ -924,11 +925,7 @@
       const endpoint = getEndpoint();
       const pendingCount = getPending().length;
       scriptUrlInput.value = endpoint;
-      if (!endpoint) {
-        syncStatus.textContent = `ยังไม่ได้ตั้งค่า URL สำหรับส่งข้อมูลเข้า Google Sheet มีรายการรอส่ง ${pendingCount} รายการ`;
-        return;
-      }
-      syncStatus.textContent = `พร้อมส่งเข้า Google Sheet มีรายการรอส่ง ${pendingCount} รายการ`;
+      syncStatus.textContent = `พร้อมส่งเข้า Google Sheet ด้วย URL ประจำ มีรายการรอส่ง ${pendingCount} รายการ`;
     }
 
     function riskClass(risk) {
