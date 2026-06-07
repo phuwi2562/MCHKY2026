@@ -1,0 +1,19 @@
+{
+  "name": "MISS นมแม่ ตำบลคำใหญ่",
+  "short_name": "MISS นมแม่",
+  "description": "แอพมือถือสำหรับ อสม.ตำบลคำใหญ่ ลงเยี่ยมและดูแลมารดาและทารก",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4fbf8",
+  "theme_color": "#0f9b8e",
+  "orientation": "portrait",
+  "lang": "th",
+  "icons": [
+    {
+      "src": "osm-cartoon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
